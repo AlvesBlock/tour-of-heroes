@@ -3,7 +3,7 @@
 <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between"
 fxLayout.xs="column">
 
-  <mat-card *ngFor="let hero of heroes" routerLink="/heroes/{{hero.id}}" class="pointer">
+  <mat-card *ngFor="let hero of heroes" [routerLink]="['/heroes/', hero.id]" class="pointer">
     <mat-card-title> {{ hero.name }} </mat-card-title>
   </mat-card>
 
