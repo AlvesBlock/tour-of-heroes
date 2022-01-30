@@ -1,33 +1,40 @@
-
-<div *ngIf="hero">
-
-
-
-  <mat-card>
-    <mat-card-title>{{ hero.name | uppercase}}</mat-card-title>
+<form [formGroup]="form" novalidate>
+<mat-card>
+    <mat-card-title>{{ isEditing ? "update" : "Create" }} Hero</mat-card-title>
     <mat-card-content fxLayout="column">
-      <mat-form-field>
+
+      <mat-form-field *ngIf="!isEditing">
         <mat-label>ID</mat-label>
-        <input matInput disabled [value]="hero.id"/>
+        <input matInput  formControlName="id"/>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Hero name</mat-label>
-        <input matInput type="text" id="name" [(ngModel)]="hero.name" placeholder="Name">
+        <input matInput type="text" id="name" formControlName="name" placeholder="Name">
+
+        <mat-error *ngIf="form.controls['name'].hasError('required')">Name is required</mat-error>
+        <mat-error *ngIf="form.controls['name'].hasError('minlength')">
+
+          Name shoud contain at least 3 characters</mat-error>
       </mat-form-field>
-
-
 
     </mat-card-content>
 
     <mat-card-actions>
+      <button mat-raised-button color="primary"
+      (click)="create()"
+      *ngIf="!isEditing"> Create</button>
+
+      <button mat-raised-button color="primary"
+      (click)="update()"
+      *ngIf="isEditing"> Update</button>
+
       <button mat-raised-button (click)="goBack()" > Go Back</button>
     </mat-card-actions>
 
   </mat-card>
+</form>
 
-
-  </div>
 
 
   <div *ngIf="!hero">

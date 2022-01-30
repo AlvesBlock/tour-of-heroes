@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../../core/services/hero.service';
-import { MessageService } from '../../../core/services/message.service';
 import { Hero } from '../../../core/models/hero.model';
+import { DialogData } from 'src/app/core/models/dialog-data.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from 'src/app/core/components/confirmation-dialog/confirmation-dialog.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -10,19 +13,48 @@ import { Hero } from '../../../core/models/hero.model';
   styleUrls: ['./heroes.component.css']
 })
 export class HeroesComponent  implements OnInit{
-  displayedColumns: string[] = ['id', 'name'];
+  displayedColumns: string[] = ['id', 'name', 'actions'];
   heroes: Hero[] = [];
 
-  constructor(private heroService: HeroService) {}
+  constructor(private dialog: MatDialog, private heroService: HeroService, private router: Router) {}
 
   ngOnInit(): void {
     this.getHeroes();
   }
 
   getHeroes(): void{
-    this.heroService.getHeroes().subscribe(heroes => this.heroes = heroes);
+    this.heroService.getAll().subscribe(heroes => this.heroes = heroes);
   }
 
+  add(): void {
+    return
+  }
+
+  delete(hero: Hero): void {
+    const dialogData: DialogData = {
+      cancelText: 'Cancel',
+      confirmText: 'Delete',
+      content: `Delete '${hero.name}?'`
+    }
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+      width: '300px'
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if(result) {
+        this.heroService.delete(hero).subscribe(() => {
+          //this.heroes = this.heroes.filter(h => h != hero);
+          this.getHeroes();
+        });
+      }
+    });
+  }
+
+  onSelected(hero: Hero): void {
+    this.delete(hero);
+  }
 
 
 }

@@ -1,0 +1,15 @@
+
+
+<mat-dialog-content class="mat-typography">
+  <p class="mat-body-1">
+    {{ data.content}}
+  </p>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">
+    {{data.cancelText}}
+  </button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>
+    {{data.confirmText}}</button>
+</mat-dialog-actions>
